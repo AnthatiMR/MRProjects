@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="36c93599-b7dd-4fc9-aa65-27b4bb95ddc0" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="0dfb2cb6-dbd0-48cb-8443-8ffe6e6abe4d" >
+		<email:smtp-connection host="smtp.gmail.com" port="587" user="anthatimasthan795@gmail.com" password="fobvkrvbxvwtjujc" >
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
+	<flow name="sending-mailFlow" doc:id="23672744-1481-4e53-9c1a-93b8828f6a07" >
+		<http:listener doc:name="Listener" doc:id="0a1bde39-612a-4f50-9841-7015791a9f34" config-ref="HTTP_Listener_config" path="/email"/>
+		<email:send doc:name="Send" doc:id="42574a36-f576-46a5-8eb9-f1209094e33a" config-ref="Email_SMTP" fromAddress="anthatimasthan795@gmail.com" subject="mail-project-Masthan">
+			<email:to-addresses >
+				<email:to-address value="anthatimasthan795@gmail.com" />
+				<email:to-address value="aallasukumar@gmail.com" />
+				<email:to-address value="masthan2k14@gmail.com" />
+			</email:to-addresses>
+			<email:body >
+				<email:content ><![CDATA[{ massage: "welcome to mulesoft & masthan done the mail project",
+	author: "masthan anna",
+	written: "masthan"
+}]]></email:content>
+			</email:body>
+		</email:send>
+		<logger level="INFO" doc:name="Logger" doc:id="1d26b3a1-a2e2-4833-89f1-ba546d27776a" message=";;;log the payload;;;;;;;;HERE"/>
+		<ee:transform doc:name="Transform Message" doc:id="087f2087-c8d7-4436-a1e3-921a0457fe70" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
